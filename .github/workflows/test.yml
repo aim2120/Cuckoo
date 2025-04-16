@@ -19,7 +19,13 @@ jobs:
         run: |
           make ci
           set -o pipefail && xcodebuild test -scheme "Cuckoo-macOS" -workspace Cuckoo.xcworkspace \
-            | xcbeautify --renderer github-actions
+            | tee test.log | xcbeautify --renderer github-actions
+      - name: Upload test logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-logs-xcode16
+          path: test.log
 
   test_macOS_xcode_15:
     name: Build and Test on macOS with Xcode 15
@@ -35,7 +41,13 @@ jobs:
         run: |
           make ci
           set -o pipefail && xcodebuild test -scheme "Cuckoo-macOS" -workspace Cuckoo.xcworkspace \
-            | xcbeautify --renderer github-actions
+            | tee test.log | xcbeautify --renderer github-actions
+      - name: Upload test logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-logs-xcode15
+          path: test.log
 
   test_iOS:
     name: Build and Test on iOS simulator
@@ -52,4 +64,10 @@ jobs:
           make ci
           set -o pipefail && xcodebuild test -scheme "Cuckoo-iOS" -workspace Cuckoo.xcworkspace \
             -destination "platform=iOS Simulator,name=iPhone 16,OS=18.0" \
-            | xcbeautify --renderer github-actions
+            | tee test.log | xcbeautify --renderer github-actions
+      - name: Upload test logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-logs-ios
+          path: test.log
