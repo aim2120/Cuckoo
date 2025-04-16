@@ -16,6 +16,15 @@ jobs:
           make ci
           ./build_generator | tee build_generator.log | xcbeautify --renderer github-actions
           ./Generator/bin/cuckoonator --version
+      - name: Upload artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Generator/bin/cuckoonator
+          path: Generator/bin/cuckoonator
+      - name: Test cuckoonator
+        run: |
+          ./Generator/bin/cuckoonator --verbose
 
   # test_macOS_xcode_16:
   #   name: Build and Test on macOS with Xcode 16
